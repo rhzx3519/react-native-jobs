@@ -6,7 +6,7 @@ import {
   FlatList,
   ActivityIndicator,
 } from "react-native";
-import { useNavigation, StackActions } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
 import styles from "./popularjobs.style";
 import { COLORS, SIZES } from "../../../constants";
@@ -45,7 +45,7 @@ const Popularjobs = () => {
               <PopularJobCard 
                 item={item}
                 handleCardPress={() => {
-                  navigation.dispatch(StackActions.push('JobDetail', { id: item?.job_id }))
+                  navigation.navigate('JobDetail', { id: item?.job_id })
                 }}
               />
             )}
