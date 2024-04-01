@@ -37,3 +37,5 @@ yarn-error.*
 # builds
 ios/
 android/
+
+.env
