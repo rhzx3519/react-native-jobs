@@ -30,7 +30,7 @@ const useFetch = (endpoint, query) => {
       setIsLoading(false)
     } catch (error) {
       setError(error)
-      alert('There is an error')
+      alert('There is an error', error)
     } finally {
       setIsLoading(false)
     }

@@ -6,6 +6,7 @@ import {
   FlatList,
   ActivityIndicator,
 } from "react-native";
+import { useNavigation, StackActions } from "@react-navigation/native";
 
 import styles from "./popularjobs.style";
 import { COLORS, SIZES } from "../../../constants";
@@ -13,6 +14,7 @@ import PopularJobCard from "../../common/cards/popular/PopularJobCard";
 import useFetch from '../../../hook/useFetch';
 
 const Popularjobs = () => {
+  const navigation = useNavigation();
 
   const { data, isLoading, error } = useFetch('search', {
     query: 'React developer',
@@ -20,7 +22,7 @@ const Popularjobs = () => {
     num_pages: '1',
   })
 
-  console.log(data, error)
+  // console.log(data, error)
 
   return (
     <View style={styles.container}>
@@ -39,9 +41,12 @@ const Popularjobs = () => {
         ) : (
           <FlatList 
             data={data}
-            renderItem={(item) => (
+            renderItem={({index, item}) => (
               <PopularJobCard 
                 item={item}
+                handleCardPress={() => {
+                  navigation.dispatch(StackActions.push('JobDetail', { id: item?.job_id }))
+                }}
               />
             )}
             keyExtractor={item => item?.job_id}

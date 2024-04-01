@@ -48,7 +48,7 @@ const Welcome = () => {
       <View style={styles.tabsContainer}>
         <FlatList 
           data={jobTypes} 
-          renderItem={({ item }) => (
+          renderItem={({ index, item }) => (
             <TouchableOpacity
               style={styles.tab(activeJobType, item)}
               onPress={() => {

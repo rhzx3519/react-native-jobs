@@ -1,5 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  ActivityIndicator,
+  RefreshControl,
+} from 'react-native';
 import { useState, useCallback } from 'react';
 import {
   SafeAreaProvider,
@@ -12,19 +19,62 @@ import { useFonts } from "expo-font";
 
 import { COLORS, icons, images, SIZES } from './constants';
 import {
-  Nearbyjobs, Popularjobs, ScreenHeaderBtn, Welcome
+  Nearbyjobs, Popularjobs, ScreenHeaderBtn, Welcome,
+  Company, JobAbout, JobFooter, JobTabs
 } from './components';
+import useFetch from './hook/useFetch';
+
+
+const JobDetailScreen = ({ navigation, route }) => {
+
+  const { data, isLoading, error, refetch } = useFetch('job-details', {
+    job_id: route.param?.id,
+  })
+
+  const [refreshing, setRefreshing] = useState(false)
+
+  const onRefresh = () => {
+
+  }
+
+  const insets = useSafeAreaInsets();
+  <ScrollView
+    style={{ ...styles.container(insets), backgroundColor: COLORS.lightWhite }}
+    showsVerticalScrollIndicator={false}
+    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+  >
+    {isLoading ? (
+      <ActivityIndicator size='large' color={COLORS.primary} />
+    ) : error ? (
+      <Text>Something went wrong</Text>
+    ) : data.length === 0 ? (
+      <Text>No data</Text>
+    ) : (
+      <View style={{ padding: SIZES.medium, paddingBottom: 100 }}>
+        <Company
+          companyLogo={data[0].employer_logo}
+          jobTitle={data[0].job_title}
+          companyName={data[0].employer_name}
+          location={data[0].job_country}
+        />
+
+        <JobTabs
+
+        />
+      </View>
+    )}
+
+  </ScrollView>
+}
 
 
 const HomeScreen = () => {
   const insets = useSafeAreaInsets();
 
   return (
-    <ScrollView
-      style={styles.container(insets)}
-    >
-      <Welcome 
-      
+    <ScrollView style={styles.container(insets)}>
+      <Welcome
+
       />
 
       <Popularjobs
@@ -43,7 +93,8 @@ const Stack = createNativeStackNavigator();
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const [ fontsLoaded ] = useFonts({
+
+  const [fontsLoaded] = useFonts({
     DMBold: require('./assets/fonts/DMSans-Bold.ttf'),
     DMMedium: require('./assets/fonts/DMSans-Medium.ttf'),
     DMRegular: require('./assets/fonts/DMSans-Regular.ttf'),
@@ -74,6 +125,30 @@ export default function App() {
               ),
               headerTitle: ""
             }}
+          />
+          <Stack.Screen
+            name='JobDetail'
+            component={JobDetailScreen}
+            options={({ navigation }) => ({
+              headerStyle: { backgroundColor: COLORS.lightWhite },
+              headerShadowVisible: false,
+              headerBackVisible: false,
+              headerLeft: () => (
+                <ScreenHeaderBtn
+                  iconUrl={icons.left}
+                  dimension="60%"
+                  handlePress={() => { navigation.goBack() }}
+                />
+              ),
+              headerRight: () => (
+                <ScreenHeaderBtn
+                  iconUrl={icons.share}
+                  dimension="60%"
+                  handlePress={() => { navigation.goBack() }}
+                />
+              ),
+              headerTitle: '',
+            })}
           />
         </Stack.Navigator>
       </NavigationContainer>
