@@ -40,7 +40,7 @@ const Nearbyjobs = () => {
               job={job}
               key={`nearby-job-${job?.job_id}`}
               handleCardPress={() => {
-                navigation.dispatch(StackActions.push('JobDetail', { id: job?.job_id }))
+                navigation.navigate('JobDetail', { id: job?.job_id })        
               }}
             />
           ))

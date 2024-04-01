@@ -1,16 +1,9 @@
-import { StatusBar } from 'expo-status-bar';
 import {
-  ScrollView,
   StyleSheet,
-  Text,
-  View,
-  ActivityIndicator,
-  RefreshControl,
 } from 'react-native';
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 import {
   SafeAreaProvider,
-  useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -19,97 +12,12 @@ import { useFonts } from "expo-font";
 
 import { COLORS, icons, images, SIZES } from './constants';
 import {
-  Nearbyjobs, Popularjobs, ScreenHeaderBtn, Welcome,
-  Company, JobAbout, JobFooter, JobTabs, Specifics
+   ScreenHeaderBtn
 } from './components';
-import useFetch from './hook/useFetch';
+import HomeScreen from './app/HomeScreen';
+import JobDetailScreen from './app/JobDetailScreen';
+import SearchScreen from './app/SearchScreen';
 
-const tabs = ['About', 'Qualifications', 'Responsibilities'];
-
-const JobDetailScreen = ({ navigation, route }) => {
-  const { data, isLoading, error, refetch } = useFetch('job-details', {
-    job_id: route.params?.id,
-  })
-
-  const [refreshing, setRefreshing] = useState(false);
-  const [activeTab, setActiveTab] = useState(tabs[0]);
-
-  const onRefresh = () => {
-
-  }
-  const displayTabContent = () => {
-    switch (activeTab) {
-      case "Qualifications":
-        return <Specifics
-          title="Qualifications"
-          points={data[0].job_highlights?.qualifications ?? ['N/A']}
-        />
-      case "About":
-        break
-      case "Responsibilities":
-        break
-      default:
-        break;
-    }
-  }
-
-  const insets = useSafeAreaInsets();
-  return (
-    <ScrollView 
-      style={styles.container(insets)}
-      showsVerticalScrollIndicator={false}
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-    >
-      {isLoading ? (
-        <ActivityIndicator size='large' color={COLORS.primary} />
-      ) : error ? (
-        <Text>Something went wrong</Text>
-      ) : data.length === 0 ? (
-        <Text>No data</Text>
-      ) : (
-        <View style={{ padding: SIZES.medium, paddingBottom: 100 }}>
-          <Company
-            companyLogo={data[0].employer_logo}
-            jobTitle={data[0].job_title}
-            companyName={data[0].employer_name}
-            location={data[0].job_country}
-          />
-
-          <JobTabs
-            tabs={tabs}
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-          />
-
-          {displayTabContent()}
-        </View>
-      )}
-
-    </ScrollView>
-  )
-
-}
-
-
-const HomeScreen = () => {
-  const insets = useSafeAreaInsets();
-
-  return (
-    <ScrollView style={styles.container(insets)}>
-      <Welcome
-
-      />
-
-      <Popularjobs
-
-      />
-
-      <Nearbyjobs
-
-      />
-    </ScrollView>
-  )
-}
 
 const Stack = createNativeStackNavigator();
 
@@ -149,6 +57,7 @@ export default function App() {
               headerTitle: ""
             }}
           />
+
           <Stack.Screen
             name='JobDetail'
             component={JobDetailScreen}
@@ -173,18 +82,25 @@ export default function App() {
               headerTitle: '',
             })}
           />
+
+          <Stack.Screen
+            name="Search"
+            component={SearchScreen}
+            options={({ navigation }) => ({
+              headerStyle: { backgroundColor: COLORS.lightWhite },
+              headerShadowVisible: false,
+              headerLeft: () => (
+                <ScreenHeaderBtn
+                    iconUrl={icons.left}
+                    dimension='60%'
+                    handlePress={() => navigation.goBack()}
+                />
+              ),
+              headerTitle: '',
+            })}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
   );
 }
-
-
-const styles = StyleSheet.create({
-  container: (insets) => ({
-    paddingTop: insets.top,
-    paddingBottom: insets.bottom,
-    paddingLeft: insets.left,
-    paddingRight: insets.right,
-  }),
-});

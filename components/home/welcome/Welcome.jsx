@@ -1,23 +1,27 @@
-import React, { useState } from 'react'
-import { 
-  View, 
+import React, { useState } from "react";
+import {
+  View,
   Text,
   TouchableOpacity,
   Image,
   FlatList,
-  TextInput
-} from 'react-native'
+  TextInput,
+} from "react-native";
 
-import styles from './welcome.style'
-import { icons, SIZES } from '../../../constants'
-import { useNavigation } from '@react-navigation/native';
+import styles from "./welcome.style";
+import { icons, SIZES } from "../../../constants";
+import { useNavigation } from "@react-navigation/native";
 
+const jobTypes = [
+  { key: "Full-time", value: "FULLTIME" },
+  { key: "Part-time", value: "PARTTIME" },
+  { key: "Contractor", value: "CONTRACTOR" },
+  { key: "Internship", value: "INTERN" },
+];
 
-const jobTypes = ["Full-time", "Part-time", "Contractor"]
-
-const Welcome = () => {
+const Welcome = ({ searchTerm, setSearchTerm }) => {
   const navigation = useNavigation();
-  const [activeJobType, setActiveJobType] = useState('Full-time')
+  const [activeJobType, setActiveJobType] = useState("Full-time");
 
   return (
     <View>
@@ -28,48 +32,48 @@ const Welcome = () => {
 
       <View style={styles.searchContainer}>
         <View style={styles.searchWrapper}>
-          <TextInput 
+          <TextInput
             style={styles.searchInput}
-            value=''
-            onChange={() => {}}
+            value={searchTerm}
+            onChangeText={(newText) => setSearchTerm(newText)}
             placeholder="What are you looking for?"
           />
         </View>
 
-        <TouchableOpacity style={styles.searchBtn} onPress={() => {}}>
-          <Image 
+        <TouchableOpacity
+          style={styles.searchBtn}
+          onPress={() => {
+            navigation.push("Search", { searchTerm, activeJobType });
+          }}
+        >
+          <Image
             source={icons.search}
-            resizeMode='contain'
+            resizeMode="contain"
             style={styles.searchBtnImage}
           />
         </TouchableOpacity>
       </View>
 
       <View style={styles.tabsContainer}>
-        <FlatList 
-          data={jobTypes} 
+        <FlatList
+          data={jobTypes}
           renderItem={({ index, item }) => (
             <TouchableOpacity
-              style={styles.tab(activeJobType, item)}
+              style={styles.tab(activeJobType, item.value)}
               onPress={() => {
-                setActiveJobType(item)
-                // navigation.push(`/search/${item}`)
+                setActiveJobType(item.value);
               }}
             >
-              <Text
-                style={styles.tabText(activeJobType, item)}
-              >
-                {item}
-              </Text>
+              <Text style={styles.tabText(activeJobType, item.value)}>{item.key}</Text>
             </TouchableOpacity>
           )}
-          keyExtractor={item => item}
+          keyExtractor={(item) => item.key}
           contentContainerStyle={{ columnGap: SIZES.small }}
           horizontal
         />
       </View>
     </View>
-  )
-}
+  );
+};
 
-export default Welcome
+export default Welcome;
