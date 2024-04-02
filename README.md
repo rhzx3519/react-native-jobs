@@ -3,12 +3,12 @@ This project is built upon React Native & React Native Navigation. It leveages R
 
 # home
 
-[home](./readme/home.gif)
+![home](./readme/home.gif)
 
 # search
 
-[search](./readme/search.gif)
+![search](./readme/search.gif)
 
 # detail
 
-[detail](./readme/detail.gif)
+![detail](./readme/detail.gif)
