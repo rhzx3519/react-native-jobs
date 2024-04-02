@@ -4,7 +4,7 @@
     "slug": "react-native-jobs",
     "scheme": "react-native-jobs",
     "version": "1.0.0",
-    "orientation": "portrait",
+    // "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
@@ -28,6 +28,14 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-screen-orientation",
+        {
+          "initialOrientation": "DEFAULT"
+        }
+      ]
+    ]
   }
 }
