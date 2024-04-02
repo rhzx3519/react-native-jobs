@@ -66,8 +66,8 @@ const SearchScreen = ({ navigation, route }) => {
       renderItem={({ item }) => (
         <NearbyJobCard
           job={item}
-          handleNavigate={() => {
-            navigation.navigate('JobDetail', { id: job?.job_id })
+          handleCardPress={() => {
+            navigation.navigate('JobDetail', { id: item?.job_id })
           }}
         />
       )}

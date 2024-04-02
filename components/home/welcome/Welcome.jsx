@@ -21,7 +21,7 @@ const jobTypes = [
 
 const Welcome = ({ searchTerm, setSearchTerm }) => {
   const navigation = useNavigation();
-  const [activeJobType, setActiveJobType] = useState("Full-time");
+  const [activeJobType, setActiveJobType] = useState("FULLTIME");
 
   return (
     <View>
